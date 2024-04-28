@@ -1,11 +1,36 @@
 import "./styles.css";
+import { useState } from "react";
+import TodoItem from "./TodoItem";
 
 export default function App() {
-  let todo_list = ["Read SpringBoot", "Complete assignments", "Prepare breakfast", "Sleep for 2 hours", "Take a shower"]
+  
+  const [todoList, setTodoList] = useState([{title:"Read SpringBoot",completed:false},{title:"Complete assignments",completed:true},{title:"Sleep for 2 hours",completed:false},{title:"Take a shower",completed:true}]);
+  
+  function handleClick(indexPositionClicked) {
+    let newItem = todoList[indexPositionClicked];
+    newItem.completed =!newItem.completed;
+    setTodoList([...todoList]);
+    console.log(todoList);
+  }
+
+  function clearCompleted(){
+    let newList = [];
+    for(let i=0;i<todoList.length;i++){
+      if(!todoList[i].completed){
+        newList.push(todoList[i]);
+      }
+    }
+    setTodoList(newList);
+  }
+
   return (
     <div className="Application">
       <h1>Todo App</h1>
-      {todo_list.map((item,index)=><h2 key={index}>{item}</h2>)}
+      {todoList.length != 0 ? todoList.map((item, index) => <TodoItem key={index} index={index} item={item} handleClick={handleClick}/>) : "Nothing to do buddy. Sleep!"}
+      {todoList.length != 0 &&
+        <button onClick={() => clearCompleted()}>
+          Clear Completed!
+        </button>}
     </div>
   );
 }
